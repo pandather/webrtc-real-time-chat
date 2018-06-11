@@ -1,26 +1,27 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 var Peer = require('simple-peer')
-var p = new Peer({ initiator: location.hash === '#1', trickle: false })
 
-p.on('error', function (err) { console.log('error', err) })
+var peer1 = new Peer({ initiator: true })
+var peer2 = new Peer()
 
-p.on('signal', function (data) {
-    console.log('SIGNAL', JSON.stringify(data))
-    document.querySelector('#outgoing').textContent = JSON.stringify(data)
+peer1.on('signal', function (data) {
+    // when peer1 has signaling data, give it to peer2 somehow
+    peer2.signal(data)
 })
 
-document.querySelector('form').addEventListener('submit', function (ev) {
-    ev.preventDefault()
-    p.signal(JSON.parse(document.querySelector('#incoming').value))
+peer2.on('signal', function (data) {
+    // when peer2 has signaling data, give it to peer1 somehow
+    peer1.signal(data)
 })
 
-p.on('connect', function () {
-    console.log('CONNECT')
-    p.send('whatever' + Math.random())
+peer1.on('connect', function () {
+    // wait for 'connect' event before using the data channel
+    peer1.send('hey peer2, how is it going?')
 })
 
-p.on('data', function (data) {
-    console.log('data: ' + data)
+peer2.on('data', function (data) {
+    // got a data channel message
+    console.log('got a message from peer1: ' + data)
 })
 
 },{"simple-peer":21}],2:[function(require,module,exports){

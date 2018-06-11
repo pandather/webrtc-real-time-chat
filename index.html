@@ -1,8 +1,26 @@
 <html>
   <head>
     <title>WebRTC Info</title>
+    <script type="text/javascript" src="/node_modules/simple-peer/simplepeer.min.js"></script>
+    <script type="text/javascript" src="/index.js"></script>
   </head>
+  
   <body>
+    <style>
+      #outgoing {
+	  width: 600px;
+	  word-wrap: break-word;
+      }
+    </style>
+    
+    <form>
+      <textarea id="incoming"></textarea>
+      <button type="submit">submit</button>
+    </form>
+    
+    <pre id="outgoing"></pre>
+    <script src="bundle.js"></script>
+    
     This is boring currently.
   </body>
 </html>
